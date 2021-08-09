@@ -21,4 +21,15 @@
 4. Make sure ".Net Core Launch (web)" is selected
 5. Press run and enjoy!
 
-### Access your running API on https://localhost:5001/
+Access your running API on https://localhost:5001/ over HTTPS or http://localhost:5000 over HTTP
+
+<hr>
+
+## Run With Docker
+1. ```docker build -t <image-name> .```
+2. ```docker run -dit -p 5000:5000 -p 44319:44319 -name <container-name> <image-name>```
+
+## Run with Docker-Compose
+1. ```docker-compose up -d```
+
+Access your running API on http://localhost:44319/ for the swagger UI or use http://localhost:5000/ for all routes without swagger UI.
