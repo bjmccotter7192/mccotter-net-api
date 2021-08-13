@@ -7,7 +7,7 @@ namespace mccotter_net_api.Services
     public static class DiscService
     {
         static List<Disc> Discs { get; }
-        static int nextId = 2;
+        static int nextId = 3;
         static DiscService()
         {
             Discs = new List<Disc>
@@ -21,6 +21,16 @@ namespace mccotter_net_api.Services
                     Glide = 5.0,
                     Turn = -1.5,
                     Fade = 2.0
+                },
+                new Disc {
+                    Id = 2, 
+                    Name = "Destiny", 
+                    Manufacturer = "Westside Discs", 
+                    Weight = 171,
+                    Speed = 14.0, 
+                    Glide = 6.0,
+                    Turn = -2,
+                    Fade = 3.0
                 }
             };
         }
