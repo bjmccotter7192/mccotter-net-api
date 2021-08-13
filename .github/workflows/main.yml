@@ -39,7 +39,8 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           
   deploy_to_server:
-    name: Build
+    name: Deploy new containers to server over SSH
+    needs: push_to_registry
     runs-on: ubuntu-latest
     steps:
     - name: executing remote ssh commands using password
