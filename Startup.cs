@@ -1,3 +1,4 @@
+using System;
 using mccotter_net_api.DataAccess;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -11,6 +12,12 @@ namespace mccotter_net_api
 {
     public class Startup
     {
+        private string POSTGRES_HOST = Environment.GetEnvironmentVariable("POSTGRES_HOST");
+        private string  POSTGRES_USER = Environment.GetEnvironmentVariable("POSTGRES_USER");
+        private string  POSTGRES_PORT = Environment.GetEnvironmentVariable("POSTGRES_PORT");
+        private string  POSTGRES_PASSWORD = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD");
+        private string  POSTGRES_DATABASE = Environment.GetEnvironmentVariable("POSTGRES_DATABASE");
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -24,7 +31,8 @@ namespace mccotter_net_api
 
             services.AddControllers();
 
-            var sqlConnectionString = Configuration["PostgreSqlConnectionString"];  
+            // var sqlConnectionString = Configuration["PostgreSqlConnectionString"];  
+            var sqlConnectionString = $"Host={POSTGRES_HOST};User={POSTGRES_USER};Port={POSTGRES_PORT};Password={POSTGRES_PASSWORD};Database={POSTGRES_DATABASE};sslmode=Require;Trust Server Certificate=true;";
   
             services.AddDbContext<PostgreSqlContext>(options => options.UseNpgsql(sqlConnectionString));  
   
