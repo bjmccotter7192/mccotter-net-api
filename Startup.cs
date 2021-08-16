@@ -1,5 +1,7 @@
+using mccotter_net_api.DataAccess;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -21,10 +23,19 @@ namespace mccotter_net_api
         {
 
             services.AddControllers();
+
+            var sqlConnectionString = Configuration["PostgreSqlConnectionString"];  
+  
+            services.AddDbContext<PostgreSqlContext>(options => options.UseNpgsql(sqlConnectionString));  
+  
+            services.AddScoped<IDataAccessProvider, DataAccessProvider>();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "mccotter_net_api", Version = "v1" });
             });
+
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

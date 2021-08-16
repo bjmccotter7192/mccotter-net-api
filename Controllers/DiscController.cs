@@ -1,27 +1,29 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using mccotter_net_api.Models;
-using mccotter_net_api.Services;
+using mccotter_net_api.DataAccess;
 
-namespace ContosoPizza.Controllers
+namespace mccotter_net_api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
     public class DiscController : ControllerBase
     {
-        public DiscController()
+        private readonly IDataAccessProvider _dataAccessProvider;
+        public DiscController(IDataAccessProvider dataAccessProvider)
         {
+            _dataAccessProvider = dataAccessProvider;
         }
 
         // GET all action
         [HttpGet]
-        public ActionResult<List<Disc>> GetAll() => DiscService.GetAll();
+        public ActionResult<List<Disc>> GetDiscs() => _dataAccessProvider.GetDiscs();
 
         // GET by Id action
         [HttpGet("{id}")]
         public ActionResult<Disc> Get(int id)
         {
-            var disc = DiscService.Get(id);
+            var disc = _dataAccessProvider.GetDisc(id);
 
             if(disc == null)
                 return NotFound();
@@ -33,23 +35,22 @@ namespace ContosoPizza.Controllers
         [HttpPost]
         public IActionResult Create(Disc disc)
         {            
-            // This code will save the pizza and return a result
-            DiscService.Add(disc);
-            return CreatedAtAction(nameof(Create), new { id = disc.Id }, disc);
+            _dataAccessProvider.AddDisc(disc);
+            return CreatedAtAction(nameof(Create), new { id = disc.id }, disc);
         }
 
         // PUT action
         [HttpPut("{id}")]
-        public IActionResult Update(int id, Disc pizza)
+        public IActionResult Update(int id, Disc disc)
         {
-            if (id != pizza.Id)
+            if (id != disc.id)
                 return BadRequest();
 
-            var existingPizza = DiscService.Get(id);
-            if(existingPizza is null)
+            var currentDisc = _dataAccessProvider.GetDisc(id);
+            if(currentDisc is null)
                 return NotFound();
 
-            DiscService.Update(pizza);           
+            _dataAccessProvider.UpdateDisc(disc);           
 
             return NoContent();
         }
@@ -58,12 +59,12 @@ namespace ContosoPizza.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var pizza = DiscService.Get(id);
+            var disc = _dataAccessProvider.GetDisc(id);
 
-            if (pizza is null)
+            if (disc is null)
                 return NotFound();
 
-            DiscService.Delete(id);
+            _dataAccessProvider.DeleteDisc(id);
 
             return NoContent();
         }
