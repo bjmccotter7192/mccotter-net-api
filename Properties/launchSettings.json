@@ -25,7 +25,7 @@
       "applicationUrl": "https://localhost:5001;http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "PostgreSqlConnectionString": "Host=ec2-52-203-160-194.compute-1.amazonaws.com;Username=izbxcwwcrithld;Password=5698b4b780605f75e6deacedc8c5ac520ab10b0b249f488d5961705bee2d19cf;Port=5432;Database=debhnptkga2bhd;sslmode=Require;Trust Server Certificate=true;"
+        "PostgreSqlConnectionString": ""
       }
     }
   }
