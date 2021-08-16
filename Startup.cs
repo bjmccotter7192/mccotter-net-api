@@ -12,11 +12,6 @@ namespace mccotter_net_api
 {
     public class Startup
     {
-        private string _postgresHost = null;
-        private string _postgresUser = null;
-        private string _postgresDatabase = null;
-        private string _postgresPassword = null;
-        private string _postgresPort = null;
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -27,19 +22,13 @@ namespace mccotter_net_api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            _postgresHost = Configuration["Postgres:Host"];
-            _postgresUser = Configuration["Postgres:User"];
-            _postgresPort = Configuration["Postgres:Port"];
-            _postgresPassword = Configuration["Postgres:Password"];
-            _postgresDatabase = Configuration["Postgres:Database"];
-
             services.AddControllers();
 
-            var sqlConnectionString = "Host=" + _postgresHost + 
-                                      ";Username=" + _postgresUser + 
-                                      ";Password=" + _postgresPassword + 
-                                      ";Port=" + _postgresPort + 
-                                      ";Database=" + _postgresDatabase + 
+            var sqlConnectionString = "Host=" + Environment.GetEnvironmentVariable("DB_HOST") + 
+                                      ";Username=" + Environment.GetEnvironmentVariable("DB_USER") + 
+                                      ";Password=" + Environment.GetEnvironmentVariable("DB_PASSWORD") + 
+                                      ";Port=" + Environment.GetEnvironmentVariable("DB_PORT") + 
+                                      ";Database=" + Environment.GetEnvironmentVariable("DB_DATABASE") + 
                                       ";sslmode=Require;Trust Server Certificate=true"; 
   
             services.AddDbContext<PostgreSqlContext>(options => options.UseNpgsql(sqlConnectionString));  
