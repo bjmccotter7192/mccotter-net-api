@@ -39,7 +39,7 @@ namespace mccotter_net_api.DataAccess
   
         public List<Disc> GetDiscs()  
         {  
-            return _context.discs.ToList();  
+            return _context.discs.OrderBy(d => d.id).ToList();  
         }
     }
 }

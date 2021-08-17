@@ -21,52 +21,50 @@ namespace mccotter_net_api.Controllers
 
         // GET by Id action
         [HttpGet("{id}")]
-        public ActionResult<Disc> Get(int id)
+        public Disc GetDisc(int id)
         {
-            var disc = _dataAccessProvider.GetDisc(id);
-
-            if(disc == null)
-                return NotFound();
-
-            return disc;
+            return _dataAccessProvider.GetDisc(id);
         }
 
         // POST action
         [HttpPost]
-        public IActionResult Create(Disc disc)
-        {            
-            _dataAccessProvider.AddDisc(disc);
-            return CreatedAtAction(nameof(Create), new { id = disc.id }, disc);
+        public IActionResult AddDisc([FromBody] Disc disc)
+        {      
+            if(ModelState.IsValid)
+            {
+                _dataAccessProvider.AddDisc(disc);
+                return Ok();
+            }      
+            return BadRequest();
         }
 
         // PUT action
         [HttpPut("{id}")]
-        public IActionResult Update(int id, Disc disc)
+        public IActionResult UpdateDisc([FromBody] Disc disc)
         {
-            if (id != disc.id)
+            if (ModelState.IsValid)
+            {
+                _dataAccessProvider.UpdateDisc(disc); 
+                return Ok();
+            }
+            else
+            {
                 return BadRequest();
-
-            var currentDisc = _dataAccessProvider.GetDisc(id);
-            if(currentDisc is null)
-                return NotFound();
-
-            _dataAccessProvider.UpdateDisc(disc);           
-
-            return NoContent();
+            }          
         }
 
         // DELETE action
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public IActionResult DeleteDisc(int id)
         {
             var disc = _dataAccessProvider.GetDisc(id);
 
-            if (disc is null)
+            if (disc == null)
                 return NotFound();
 
             _dataAccessProvider.DeleteDisc(id);
 
-            return NoContent();
+            return Ok();
         }
     }
 }
