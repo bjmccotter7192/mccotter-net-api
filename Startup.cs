@@ -12,12 +12,6 @@ namespace mccotter_net_api
 {
     public class Startup
     {
-        private string POSTGRES_HOST = Environment.GetEnvironmentVariable("POSTGRES_HOST");
-        private string  POSTGRES_USER = Environment.GetEnvironmentVariable("POSTGRES_USER");
-        private string  POSTGRES_PORT = Environment.GetEnvironmentVariable("POSTGRES_PORT");
-        private string  POSTGRES_PASSWORD = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD");
-        private string  POSTGRES_DATABASE = Environment.GetEnvironmentVariable("POSTGRES_DATABASE");
-
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -28,11 +22,14 @@ namespace mccotter_net_api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers();
 
-            // var sqlConnectionString = Configuration["PostgreSqlConnectionString"];  
-            var sqlConnectionString = $"Host={POSTGRES_HOST};User={POSTGRES_USER};Port={POSTGRES_PORT};Password={POSTGRES_PASSWORD};Database={POSTGRES_DATABASE};sslmode=Require;Trust Server Certificate=true;";
+            var sqlConnectionString = "Host=" + Environment.GetEnvironmentVariable("DB_HOST") + 
+                                      ";Username=" + Environment.GetEnvironmentVariable("DB_USER") + 
+                                      ";Password=" + Environment.GetEnvironmentVariable("DB_PASSWORD") + 
+                                      ";Port=" + Environment.GetEnvironmentVariable("DB_PORT") + 
+                                      ";Database=" + Environment.GetEnvironmentVariable("DB_DATABASE") + 
+                                      ";sslmode=Require;Trust Server Certificate=true"; 
   
             services.AddDbContext<PostgreSqlContext>(options => options.UseNpgsql(sqlConnectionString));  
   
@@ -42,8 +39,6 @@ namespace mccotter_net_api
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "mccotter_net_api", Version = "v1" });
             });
-
-            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,7 +55,7 @@ namespace mccotter_net_api
                     c.InjectStylesheet("/swagger-ui/custom.css");
                 });
             }
-
+            
             app.UseHttpsRedirection();
 
             app.UseRouting();
