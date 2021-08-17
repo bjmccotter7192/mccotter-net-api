@@ -4,9 +4,12 @@ EXPOSE 5000
 
 ENV ASPNETCORE_ENVIRONMENT=Development
 ENV ASPNETCORE_URLS=http://+:5000;http://*:44319
+ENV DB_HOST=$POSTGRES_HOST
+ENV DB_USER=$POSTGRES_USER
+ENV DB_PASSWORD=$POSTGRES_PASSWORD
+ENV DB_PORT=$POSTGRES_PORT
+ENV DB_DATABASE=$POSTGRES_DATABASE
 
-# Creates a non-root user with an explicit UID and adds permission to access the /app folder
-# For more info, please refer to https://aka.ms/vscode-docker-dotnet-configure-containers
 RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
 USER appuser
 
