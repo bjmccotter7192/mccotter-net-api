@@ -10,5 +10,8 @@ namespace mccotter_net_api.Models
         public double glide { get; set; }
         public double turn { get; set; }
         public double fade { get; set; }
+        public bool inbag { get; set; }
+        public double farthest { get; set; }
+        public string plastic { get; set; }
     }
 }
