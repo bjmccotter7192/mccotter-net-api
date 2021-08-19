@@ -33,23 +33,31 @@ namespace mccotter_net_api.Controllers
             if(ModelState.IsValid)
             {
                 _dataAccessProvider.AddDisc(disc);
-                return Ok();
+                return Ok($"You have successfully added disc named: \nNAME: {disc.name} \nID: {disc.id}");
             }      
             return BadRequest();
         }
 
         // PUT action
         [HttpPut("{id}")]
-        public IActionResult UpdateDisc([FromBody] Disc disc)
+        public IActionResult UpdateDisc(int id, [FromBody] Disc disc)
         {
+            var existingDisc = _dataAccessProvider.GetDisc(id);
+
+            if (existingDisc == null)
+                return NotFound("Failed to find disc by id: " + id);
+
+            if (existingDisc.id != disc.id)
+                return BadRequest("Existing disc id does not match id provided in JSON Body.\nPlease check your input again and make sure the ids match, thanks!");
+
             if (ModelState.IsValid)
             {
                 _dataAccessProvider.UpdateDisc(disc); 
-                return Ok();
+                return Ok("You have successfully updated disc id: " + id);
             }
             else
             {
-                return BadRequest();
+                return BadRequest("Model does not match the standard, please see schema to verify everything matches up!");
             }          
         }
 
@@ -60,11 +68,11 @@ namespace mccotter_net_api.Controllers
             var disc = _dataAccessProvider.GetDisc(id);
 
             if (disc == null)
-                return NotFound();
+                return NotFound("Failed to find disc by id: " + id);
 
             _dataAccessProvider.DeleteDisc(id);
 
-            return Ok();
+            return Ok("You have successfully deleted disc id: " + id);
         }
     }
 }
