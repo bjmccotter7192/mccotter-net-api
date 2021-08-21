@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using mccotter_net_api.Models;
 using mccotter_net_api.DataAccess;
+using Microsoft.AspNetCore.Http;
 
 namespace mccotter_net_api.Controllers
 {
@@ -39,7 +40,36 @@ namespace mccotter_net_api.Controllers
         }
 
         // PUT action
+        /// <summary>
+        /// Updates an existing disc with the new values provided in Body.
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST /Disc/{id}
+        ///     {
+        ///         "id": 1,
+        ///         "name": "Sheriff",
+        ///         "manufacturer": "Dynamic Discs",
+        ///         "weight": 171,
+        ///         "speed": 12,
+        ///         "glide": 5,
+        ///         "turn": -1.5,
+        ///         "fade": 2,
+        ///         "inbag": true,
+        ///         "farthest": 300,
+        ///         "plastic": "Lucid"
+        ///     }
+        /// </remarks>
+        /// <param name="id"></param>
+        /// <param name="disc"></param>
+        /// <param name="item"></param>
+        /// <returns>An IActionResult response that shows whether the action was completed successfully or not.</returns>
+        /// <response code="201">Returns the newly created item</response>
+        /// <response code="400">If the item is null</response>  
         [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult UpdateDisc(int id, [FromBody] Disc disc)
         {
             var existingDisc = _dataAccessProvider.GetDisc(id);
@@ -53,7 +83,7 @@ namespace mccotter_net_api.Controllers
             if (ModelState.IsValid)
             {
                 _dataAccessProvider.UpdateDisc(disc); 
-                return Ok("You have successfully updated disc id: " + id);
+                return CreatedAtAction(nameof(Disc), new { id = disc.id }, disc);
             }
             else
             {
