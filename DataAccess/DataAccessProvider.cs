@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using mccotter_net_api.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace mccotter_net_api.DataAccess
 {
@@ -27,14 +28,14 @@ namespace mccotter_net_api.DataAccess
   
         public void DeleteDisc(int id)  
         {  
-            var entity = _context.discs.FirstOrDefault(t => t.id == id);  
+            var entity = _context.discs.AsNoTracking().FirstOrDefault(t => t.id == id);  
             _context.discs.Remove(entity);  
             _context.SaveChanges();  
         }  
   
         public Disc GetDisc(int id)  
         {  
-            return _context.discs.FirstOrDefault(t => t.id == id);  
+            return _context.discs.AsNoTracking().FirstOrDefault(t => t.id == id);  
         }  
   
         public List<Disc> GetDiscs()  

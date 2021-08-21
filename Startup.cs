@@ -39,11 +39,20 @@ namespace mccotter_net_api
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "mccotter_net_api", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo 
+                { 
+                    Title = "mccotter_net_api", 
+                    Version = "v1",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "BJ McCotter",
+                        Email = "bjmccotter7192@gmail.com",
+                        Url = new Uri("https://mccotter.net")
+                    }
+                });
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
-
             });
         }
 
@@ -53,7 +62,10 @@ namespace mccotter_net_api
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
+                app.UseSwagger(c =>
+                {
+                    c.SerializeAsV2 = true;
+                });
                 app.UseSwaggerUI(c => 
                 {
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "mccotter_net_api v1");
