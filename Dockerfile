@@ -1,26 +1,14 @@
-FROM mcr.microsoft.com/dotnet/aspnet:5.0-focal AS base
+FROM mcr.microsoft.com/dotnet/aspnet:6.0-focal AS base
 WORKDIR /app
 EXPOSE 5000
-
-ARG POSTGRES_HOST
-ARG POSTGRES_USER
-ARG POSTGRES_PASSWORD
-ARG POSTGRES_PORT
-ARG POSTGRES_DATABASE
 
 ENV ASPNETCORE_ENVIRONMENT=Development
 ENV ASPNETCORE_URLS=http://+:5000;http://*:44319
 
-ENV DB_HOST=$POSTGRES_HOST
-ENV DB_USER=$POSTGRES_USER
-ENV DB_PASSWORD=$POSTGRES_PASSWORD
-ENV DB_PORT=$POSTGRES_PORT
-ENV DB_DATABASE=$POSTGRES_DATABASE
-
 RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
 USER appuser
 
-FROM mcr.microsoft.com/dotnet/sdk:5.0-focal AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0-focal AS build
 WORKDIR /src
 COPY ["mccotter-net-api.csproj", "./"]
 RUN dotnet restore "mccotter-net-api.csproj"
